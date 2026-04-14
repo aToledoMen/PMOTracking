@@ -1,5 +1,3 @@
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Notification } from '@/data/types';
 import { cn } from '@/lib/utils';
@@ -12,66 +10,64 @@ interface NotificationPanelProps {
 }
 
 const typeConfig = {
-  overdue: { icon: Clock, color: 'text-red-600', bg: 'bg-red-100', label: 'Overdue' },
-  escalation: { icon: AlertTriangle, color: 'text-amber-600', bg: 'bg-amber-100', label: 'Escalation' },
-  status_change: { icon: ArrowUpRight, color: 'text-blue-600', bg: 'bg-blue-100', label: 'Status Change' },
-  assignment: { icon: UserPlus, color: 'text-violet-600', bg: 'bg-violet-100', label: 'Assignment' },
+  overdue: { icon: Clock, color: 'text-red-700', label: 'Overdue' },
+  escalation: { icon: AlertTriangle, color: 'text-amber-700', label: 'Escalation' },
+  status_change: { icon: ArrowUpRight, color: 'text-blue-700', label: 'Status' },
+  assignment: { icon: UserPlus, color: 'text-slate-700', label: 'Assignment' },
 };
 
 export function NotificationPanel({ notifications, onMarkRead, onMarkAllRead }: NotificationPanelProps) {
   const unread = notifications.filter(n => !n.read).length;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <h3 className="font-semibold text-slate-900">Notifications</h3>
+          <h3 className="text-[14px] font-semibold text-slate-900">Notifications</h3>
           {unread > 0 && (
-            <Badge className="bg-red-500 hover:bg-red-500">{unread} unread</Badge>
+            <span className="text-[11px] text-slate-500 tabular-nums">{unread} unread</span>
           )}
         </div>
         {unread > 0 && (
-          <Button variant="outline" size="sm" onClick={onMarkAllRead}>
+          <Button variant="outline" size="sm" className="h-8 text-[12px]" onClick={onMarkAllRead}>
             Mark all as read
           </Button>
         )}
       </div>
 
-      <div className="space-y-2">
-        {notifications.map(notif => {
-          const config = typeConfig[notif.type];
-          const Icon = config.icon;
-          const time = new Date(notif.timestamp);
-          const timeAgo = getTimeAgo(time);
+      <div className="bg-white border border-slate-200 rounded-md">
+        <div className="divide-y divide-slate-100">
+          {notifications.map(notif => {
+            const config = typeConfig[notif.type];
+            const Icon = config.icon;
+            const time = new Date(notif.timestamp);
+            const timeAgo = getTimeAgo(time);
 
-          return (
-            <Card
-              key={notif.id}
-              onClick={() => !notif.read && onMarkRead(notif.id)}
-              className={cn(
-                'p-4 cursor-pointer transition-all duration-200 hover:shadow-md',
-                !notif.read && 'border-l-4 border-l-blue-500 bg-blue-50/20'
-              )}
-            >
-              <div className="flex items-start gap-3">
-                <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0', config.bg)}>
-                  <Icon className={cn('w-5 h-5', config.color)} />
-                </div>
+            return (
+              <div
+                key={notif.id}
+                onClick={() => !notif.read && onMarkRead(notif.id)}
+                className={cn(
+                  'flex items-start gap-3 px-4 py-3 cursor-pointer transition-colors hover:bg-slate-50',
+                  !notif.read && 'bg-blue-50/30'
+                )}
+              >
+                <Icon className={cn('w-4 h-4 flex-shrink-0 mt-0.5', config.color)} strokeWidth={1.75} />
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h4 className="text-sm font-medium text-slate-900">{notif.title}</h4>
-                    <Badge variant="outline" className={cn('text-[10px]', config.bg, config.color)}>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <h4 className="text-[12px] font-semibold text-slate-900">{notif.title}</h4>
+                    <span className={cn('text-[9px] font-semibold uppercase tracking-wider', config.color)}>
                       {config.label}
-                    </Badge>
-                    {!notif.read && <div className="w-2 h-2 rounded-full bg-blue-500" />}
+                    </span>
+                    {!notif.read && <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />}
                   </div>
-                  <p className="text-sm text-slate-600">{notif.message}</p>
-                  <p className="text-xs text-slate-400 mt-1">{timeAgo}</p>
+                  <p className="text-[12px] text-slate-600 leading-snug">{notif.message}</p>
+                  <p className="text-[10px] text-slate-400 mt-1 tabular-nums">{timeAgo}</p>
                 </div>
               </div>
-            </Card>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );

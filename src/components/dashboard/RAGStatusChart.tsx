@@ -1,8 +1,7 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { Card } from '@/components/ui/card';
 import { getRAGSummary } from '@/data/mock-data';
 
-const COLORS = { Green: '#10b981', Amber: '#f59e0b', Red: '#ef4444' };
+const COLORS = { Green: '#15803d', Amber: '#b45309', Red: '#b91c1c' };
 
 export function RAGStatusChart() {
   const rag = getRAGSummary();
@@ -14,20 +13,24 @@ export function RAGStatusChart() {
   const total = rag.Green + rag.Amber + rag.Red;
 
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
-      <h3 className="text-sm font-semibold text-slate-900 mb-1">Portfolio RAG Status</h3>
-      <p className="text-xs text-slate-500 mb-4">{total} countries total</p>
-      <div className="flex items-center gap-6">
-        <div className="w-40 h-40 relative">
+    <div className="bg-white border border-slate-200 rounded-md p-4">
+      <div className="flex items-start justify-between mb-3">
+        <div>
+          <h3 className="text-[13px] font-semibold text-slate-900">Portfolio RAG</h3>
+          <p className="text-[11px] text-slate-500 tabular-nums">{total} countries</p>
+        </div>
+      </div>
+      <div className="flex items-center gap-5">
+        <div className="w-28 h-28 relative flex-shrink-0">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={data}
                 cx="50%"
                 cy="50%"
-                innerRadius={45}
-                outerRadius={70}
-                paddingAngle={4}
+                innerRadius={38}
+                outerRadius={54}
+                paddingAngle={2}
                 dataKey="value"
                 strokeWidth={0}
               >
@@ -36,33 +39,33 @@ export function RAGStatusChart() {
                 ))}
               </Pie>
               <Tooltip
-                contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
+                contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0', fontSize: '11px' }}
                 formatter={(value) => [`${value} countries`, '']}
               />
             </PieChart>
           </ResponsiveContainer>
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="text-center">
-              <p className="text-2xl font-bold text-slate-900">{Math.round((rag.Green / total) * 100)}%</p>
-              <p className="text-[10px] text-slate-500">On Track</p>
+              <p className="text-xl font-semibold text-slate-900 tabular-nums leading-none">{Math.round((rag.Green / total) * 100)}%</p>
+              <p className="text-[9px] text-slate-500 mt-0.5 uppercase tracking-wider">On Track</p>
             </div>
           </div>
         </div>
-        <div className="space-y-3 flex-1">
+        <div className="flex-1 space-y-2">
           {data.map((item) => (
-            <div key={item.name} className="flex items-center justify-between">
+            <div key={item.name} className="flex items-center justify-between text-[12px]">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                <span className="text-sm text-slate-600">{item.name}</span>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: item.color }} />
+                <span className="text-slate-600">{item.name}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-slate-900">{item.value}</span>
-                <span className="text-xs text-slate-400">({Math.round((item.value / total) * 100)}%)</span>
+              <div className="flex items-center gap-1.5 tabular-nums">
+                <span className="font-semibold text-slate-900">{item.value}</span>
+                <span className="text-[10px] text-slate-400">{Math.round((item.value / total) * 100)}%</span>
               </div>
             </div>
           ))}
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

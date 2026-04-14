@@ -23,8 +23,8 @@ export function AppLayout({ activeView, onViewChange, notificationCount, childre
           notificationCount={notificationCount}
           onNotificationsClick={() => onViewChange('notifications')}
         />
-        <main className="flex-1 overflow-auto p-8">
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <main className="flex-1 overflow-auto px-6 py-5">
+          <div key={activeView} className="animate-in">
             {children}
           </div>
         </main>

@@ -19,20 +19,24 @@ const navItems: { id: ViewType; label: string; icon: React.ElementType }[] = [
 
 export function Sidebar({ activeView, onViewChange, notificationCount }: SidebarProps) {
   return (
-    <aside className="w-64 bg-gradient-to-b from-slate-900 to-slate-800 text-white flex flex-col min-h-screen">
-      <div className="p-6 border-b border-slate-700/50">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center font-bold text-lg shadow-lg shadow-blue-500/25">
+    <aside className="w-60 bg-slate-950 text-slate-300 flex flex-col min-h-screen border-r border-slate-800">
+      <div className="px-5 py-5 border-b border-slate-800/80">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-sm bg-white flex items-center justify-center font-bold text-[13px] text-slate-900">
             P
           </div>
           <div>
-            <h1 className="font-bold text-lg tracking-tight">PMO Tracker</h1>
-            <p className="text-xs text-slate-400">Global Deployment</p>
+            <h1 className="font-semibold text-[13px] tracking-tight text-white">PMO Tracker</h1>
+            <p className="text-[10px] text-slate-500 tracking-wider uppercase">Global Deployment</p>
           </div>
         </div>
       </div>
 
-      <nav className="flex-1 p-4 space-y-1">
+      <div className="px-4 pt-5 pb-2">
+        <p className="text-[10px] font-medium uppercase tracking-wider text-slate-600">Navigation</p>
+      </div>
+
+      <nav className="flex-1 px-3">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeView === item.id;
@@ -41,16 +45,16 @@ export function Sidebar({ activeView, onViewChange, notificationCount }: Sidebar
               key={item.id}
               onClick={() => onViewChange(item.id)}
               className={cn(
-                'w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200',
+                'w-full flex items-center gap-2.5 pl-3 pr-3 py-2 text-[13px] transition-colors duration-150 relative border-l-2',
                 isActive
-                  ? 'bg-white/10 text-white shadow-lg shadow-black/10 backdrop-blur-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-white/5'
+                  ? 'border-blue-500 text-white bg-slate-900/50 font-medium'
+                  : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/30'
               )}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className="w-4 h-4" strokeWidth={1.75} />
               <span>{item.label}</span>
               {item.id === 'notifications' && notificationCount > 0 && (
-                <span className="ml-auto bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+                <span className="ml-auto text-[10px] font-semibold text-slate-400 tabular-nums">
                   {notificationCount}
                 </span>
               )}
@@ -59,14 +63,14 @@ export function Sidebar({ activeView, onViewChange, notificationCount }: Sidebar
         })}
       </nav>
 
-      <div className="p-4 border-t border-slate-700/50">
-        <div className="flex items-center gap-3 px-4 py-3">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-xs font-bold">
+      <div className="px-4 py-4 border-t border-slate-800/80">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-semibold text-slate-300 border border-slate-700">
             SC
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">Sarah Chen</p>
-            <p className="text-xs text-slate-400">PMO Director</p>
+            <p className="text-[12px] font-medium text-slate-200 truncate">Sarah Chen</p>
+            <p className="text-[10px] text-slate-500 tracking-wide">PMO Director</p>
           </div>
         </div>
       </div>

@@ -2,6 +2,23 @@ import { defineConfig, Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
+// Plugin to remove type="module" from script tags for Domo compatibility
+function domoHtmlPlugin(): Plugin {
+  return {
+    name: 'domo-html-transform',
+    transformIndexHtml(html) {
+      // Remove type="module" and crossorigin, move script to end of body
+      const scriptMatch = html.match(/<script[^>]*src="[^"]*"[^>]*><\/script>/);
+      if (scriptMatch) {
+        html = html.replace(scriptMatch[0], '');
+        const cleanScript = scriptMatch[0].replace(/ type="module"/g, '').replace(/ crossorigin/g, '');
+        html = html.replace('</body>', `  ${cleanScript}\n  </body>`);
+      }
+      return html;
+    },
+  }
+}
+
 // Vite plugin to set up Domo Ryuu proxy middleware
 function domoProxyPlugin(): Plugin {
   return {
@@ -35,6 +52,7 @@ export default defineConfig({
   plugins: [
     react(),
     domoProxyPlugin(),
+    domoHtmlPlugin(),
   ],
   resolve: {
     alias: {
@@ -47,6 +65,15 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
+    rollupOptions: {
+      output: {
+        format: 'iife',
+        inlineDynamicImports: true,
+        entryFileNames: 'assets/[name].[hash].js',
+        chunkFileNames: 'assets/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash][extname]',
+      },
+    },
   },
-  base: '/',
+  base: './',
 })

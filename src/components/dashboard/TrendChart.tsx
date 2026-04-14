@@ -1,44 +1,43 @@
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
-import { Card } from '@/components/ui/card';
 import { kpiHistory } from '@/data/mock-data';
 
 export function TrendChart() {
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
-      <h3 className="text-sm font-semibold text-slate-900 mb-1">KPI Trends</h3>
-      <p className="text-xs text-slate-500 mb-4">On-time rate & partner score over 12 weeks</p>
-      <ResponsiveContainer width="100%" height={220}>
-        <AreaChart data={kpiHistory}>
-          <defs>
-            <linearGradient id="onTimeGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.15} />
-              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-            </linearGradient>
-            <linearGradient id="partnerGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#10b981" stopOpacity={0.15} />
-              <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-          <XAxis dataKey="week" tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
-          <YAxis tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} domain={[60, 100]} />
-          <Tooltip
-            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
-          />
-          <Area type="monotone" dataKey="onTimeRate" stroke="#3b82f6" strokeWidth={2.5} fill="url(#onTimeGrad)" name="On-Time Rate %" dot={false} />
-          <Area type="monotone" dataKey="partnerScore" stroke="#10b981" strokeWidth={2.5} fill="url(#partnerGrad)" name="Partner Score" dot={false} yAxisId={0} />
-        </AreaChart>
-      </ResponsiveContainer>
-      <div className="flex items-center gap-6 mt-3 justify-center">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-blue-500" />
-          <span className="text-xs text-slate-500">On-Time Rate %</span>
+    <div className="bg-white border border-slate-200 rounded-md p-4">
+      <div className="flex items-start justify-between mb-3">
+        <div>
+          <h3 className="text-[13px] font-semibold text-slate-900">KPI Trends</h3>
+          <p className="text-[11px] text-slate-500">12-week rolling window</p>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-emerald-500" />
-          <span className="text-xs text-slate-500">Partner Score</span>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <div className="w-2 h-0.5 bg-blue-700" />
+            <span className="text-[10px] text-slate-500">On-Time %</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2 h-0.5 bg-slate-400" />
+            <span className="text-[10px] text-slate-500">Partner Score</span>
+          </div>
         </div>
       </div>
-    </Card>
+      <ResponsiveContainer width="100%" height={180}>
+        <AreaChart data={kpiHistory} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+          <defs>
+            <linearGradient id="onTimeGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#1d4ed8" stopOpacity={0.1} />
+              <stop offset="100%" stopColor="#1d4ed8" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="2 2" vertical={false} stroke="#f1f5f9" />
+          <XAxis dataKey="week" tick={{ fontSize: 10, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
+          <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} axisLine={false} tickLine={false} domain={[60, 100]} width={30} />
+          <Tooltip
+            contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0', fontSize: '11px', padding: '4px 8px' }}
+          />
+          <Area type="monotone" dataKey="onTimeRate" stroke="#1d4ed8" strokeWidth={1.75} fill="url(#onTimeGrad)" name="On-Time %" dot={false} />
+          <Area type="monotone" dataKey="partnerScore" stroke="#94a3b8" strokeWidth={1.5} fill="transparent" strokeDasharray="3 3" name="Partner" dot={false} />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
   );
 }

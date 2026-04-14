@@ -1,18 +1,22 @@
-import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Task, TaskStatus } from '@/data/types';
 import { countries, currentUser } from '@/data/mock-data';
+import { getCountryCode } from '@/lib/country-code';
 import { cn } from '@/lib/utils';
-import { Calendar, CheckCircle2, Clock, AlertCircle, Circle, Ban } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 
-const statusConfig: Record<TaskStatus, { icon: React.ElementType; color: string; bg: string }> = {
-  Open: { icon: Circle, color: 'text-blue-600', bg: 'bg-blue-100' },
-  'In Progress': { icon: Clock, color: 'text-amber-600', bg: 'bg-amber-100' },
-  Blocked: { icon: Ban, color: 'text-red-600', bg: 'bg-red-100' },
-  Completed: { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-100' },
-  Overdue: { icon: AlertCircle, color: 'text-red-600', bg: 'bg-red-100' },
+const statusStyle: Record<TaskStatus, { label: string; dot: string }> = {
+  Open: { label: 'text-blue-700', dot: 'bg-blue-600' },
+  'In Progress': { label: 'text-amber-700', dot: 'bg-amber-600' },
+  Blocked: { label: 'text-red-700', dot: 'bg-red-700' },
+  Completed: { label: 'text-emerald-700', dot: 'bg-emerald-700' },
+  Overdue: { label: 'text-red-700', dot: 'bg-red-700' },
+};
+
+const priorityStyle = {
+  High: 'text-red-700',
+  Medium: 'text-amber-700',
+  Low: 'text-blue-700',
 };
 
 interface MyTasksViewProps {
@@ -38,100 +42,106 @@ export function MyTasksView({ allTasks, onTasksChange }: MyTasksViewProps) {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-6">
+    <div className="space-y-4">
+      <div className="bg-white border border-slate-200 rounded-md px-5 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Avatar className="w-12 h-12">
-            <AvatarFallback className="bg-gradient-to-br from-emerald-400 to-cyan-500 text-white text-lg font-bold">
-              {currentUser.avatar}
-            </AvatarFallback>
-          </Avatar>
+          <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-[13px] font-semibold text-white">
+            {currentUser.avatar}
+          </div>
           <div>
-            <h3 className="font-semibold text-slate-900">{currentUser.name}</h3>
-            <p className="text-sm text-slate-500">{currentUser.role}</p>
+            <h3 className="text-[14px] font-semibold text-slate-900 leading-tight">{currentUser.name}</h3>
+            <p className="text-[11px] text-slate-500 uppercase tracking-wider">{currentUser.role}</p>
           </div>
         </div>
-        <div className="flex gap-3 ml-auto">
-          <div className="text-center px-4 py-2 rounded-xl bg-red-50">
-            <p className="text-lg font-bold text-red-600">{overdue}</p>
-            <p className="text-[10px] text-red-500 font-medium">Overdue</p>
+        <div className="flex gap-8">
+          <div>
+            <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-0.5">Overdue</p>
+            <p className="text-2xl font-semibold text-red-700 tabular-nums leading-none">{overdue}</p>
           </div>
-          <div className="text-center px-4 py-2 rounded-xl bg-amber-50">
-            <p className="text-lg font-bold text-amber-600">{inProgress}</p>
-            <p className="text-[10px] text-amber-500 font-medium">In Progress</p>
+          <div>
+            <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-0.5">In Progress</p>
+            <p className="text-2xl font-semibold text-amber-700 tabular-nums leading-none">{inProgress}</p>
           </div>
-          <div className="text-center px-4 py-2 rounded-xl bg-emerald-50">
-            <p className="text-lg font-bold text-emerald-600">{completed}</p>
-            <p className="text-[10px] text-emerald-500 font-medium">Completed</p>
+          <div>
+            <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-0.5">Completed</p>
+            <p className="text-2xl font-semibold text-emerald-700 tabular-nums leading-none">{completed}</p>
+          </div>
+          <div>
+            <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-0.5">Total</p>
+            <p className="text-2xl font-semibold text-slate-900 tabular-nums leading-none">{myTasks.length}</p>
           </div>
         </div>
       </div>
 
-      <div className="space-y-2">
-        {myTasks.length === 0 ? (
-          <Card className="p-12 text-center">
-            <CheckCircle2 className="w-12 h-12 text-emerald-300 mx-auto mb-3" />
-            <p className="text-slate-500">All caught up! No tasks assigned to you.</p>
-          </Card>
-        ) : (
-          myTasks.map(task => {
-            const country = countries.find(c => c.id === task.country);
-            const StatusIcon = statusConfig[task.status].icon;
-            const daysUntilDue = Math.ceil((new Date(task.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+      <div className="bg-white border border-slate-200 rounded-md">
+        <div className="grid grid-cols-[80px_1fr_100px_90px_120px_130px] items-center gap-3 px-4 py-2 border-b border-slate-200 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+          <span>Country</span>
+          <span>Task</span>
+          <span>Priority</span>
+          <span className="text-right">Due</span>
+          <span>Status</span>
+          <span className="text-right">Actions</span>
+        </div>
 
-            return (
-              <Card
-                key={task.id}
-                className={cn(
-                  'p-4 transition-all duration-200 hover:shadow-md',
-                  task.status === 'Overdue' && 'border-l-4 border-l-red-500 bg-red-50/30'
-                )}
-              >
-                <div className="flex items-center gap-4">
-                  <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center', statusConfig[task.status].bg)}>
-                    <StatusIcon className={cn('w-5 h-5', statusConfig[task.status].color)} />
-                  </div>
+        <div className="divide-y divide-slate-100">
+          {myTasks.length === 0 ? (
+            <div className="px-4 py-12 text-center">
+              <p className="text-[13px] text-slate-400">All caught up. No tasks assigned.</p>
+            </div>
+          ) : (
+            myTasks.map(task => {
+              const country = countries.find(c => c.id === task.country);
+              const daysUntilDue = Math.ceil((new Date(task.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+              const st = statusStyle[task.status];
 
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-medium text-slate-900 truncate">{task.title}</h4>
-                      {country && <span className="text-sm">{country.flag}</span>}
-                    </div>
-                    <div className="flex items-center gap-3 mt-1">
-                      <span className="text-xs text-slate-500">{country?.name}</span>
-                      <Badge variant="outline" className={cn('text-[10px]',
-                        task.priority === 'High' ? 'border-red-200 text-red-700' :
-                        task.priority === 'Medium' ? 'border-amber-200 text-amber-700' :
-                        'border-blue-200 text-blue-700'
-                      )}>
-                        {task.priority}
-                      </Badge>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-xs text-slate-500">
-                    <Calendar className="w-3.5 h-3.5" />
-                    <span className={cn(task.status === 'Overdue' && 'text-red-600 font-semibold')}>
-                      {task.status === 'Overdue' ? `${Math.abs(daysUntilDue)}d overdue` : task.dueDate}
+              return (
+                <div
+                  key={task.id}
+                  className={cn(
+                    'grid grid-cols-[80px_1fr_100px_90px_120px_130px] items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors',
+                    task.status === 'Overdue' && 'bg-red-50/30'
+                  )}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center justify-center w-7 h-5 rounded-sm bg-slate-100 text-[10px] font-semibold text-slate-700 border border-slate-200 tracking-wider">
+                      {getCountryCode(task.country)}
                     </span>
                   </div>
-
-                  <Select value={task.status} onValueChange={(v) => handleStatusChange(task.id, v as TaskStatus)}>
-                    <SelectTrigger className="w-36 h-8 text-xs">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Open">Open</SelectItem>
-                      <SelectItem value="In Progress">In Progress</SelectItem>
-                      <SelectItem value="Blocked">Blocked</SelectItem>
-                      <SelectItem value="Completed">Completed</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div className="min-w-0">
+                    <p className="text-[12px] font-medium text-slate-900 truncate">{task.title}</p>
+                    <p className="text-[10px] text-slate-500">{country?.name}</p>
+                  </div>
+                  <span className={cn('text-[10px] font-semibold uppercase tracking-wider', priorityStyle[task.priority])}>
+                    {task.priority}
+                  </span>
+                  <div className="flex items-center justify-end gap-1 text-[11px] tabular-nums">
+                    <Calendar className="w-3 h-3 text-slate-400" strokeWidth={1.75} />
+                    <span className={cn(task.status === 'Overdue' ? 'text-red-700 font-semibold' : 'text-slate-600')}>
+                      {task.status === 'Overdue' ? `${Math.abs(daysUntilDue)}d over` : task.dueDate}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className={cn('w-1.5 h-1.5 rounded-full', st.dot)} />
+                    <span className={cn('text-[11px] font-medium', st.label)}>{task.status}</span>
+                  </div>
+                  <div className="flex justify-end">
+                    <Select value={task.status} onValueChange={(v) => handleStatusChange(task.id, v as TaskStatus)}>
+                      <SelectTrigger className="w-28 h-7 text-[11px] border-slate-200">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Open">Open</SelectItem>
+                        <SelectItem value="In Progress">In Progress</SelectItem>
+                        <SelectItem value="Blocked">Blocked</SelectItem>
+                        <SelectItem value="Completed">Completed</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-              </Card>
-            );
-          })
-        )}
+              );
+            })
+          )}
+        </div>
       </div>
     </div>
   );

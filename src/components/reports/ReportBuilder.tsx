@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { countries } from '@/data/mock-data';
+import { getCountryCode } from '@/lib/country-code';
 import { Download, Save } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const availableFields = [
   { id: 'name', label: 'Country Name' },
@@ -64,132 +63,150 @@ export function ReportBuilder() {
     URL.revokeObjectURL(url);
   };
 
+  const sectionLabel = 'text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2';
+
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-3 gap-6">
-        <div className="space-y-4">
-          <Card className="p-4">
-            <h4 className="text-sm font-semibold mb-3">Select Fields</h4>
-            <div className="space-y-2">
-              {availableFields.map(field => (
-                <button
-                  key={field.id}
-                  onClick={() => toggleField(field.id)}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
-                    selectedFields.includes(field.id)
-                      ? 'bg-blue-100 text-blue-800 ring-1 ring-blue-300'
-                      : 'bg-slate-50 hover:bg-slate-100 text-slate-600'
-                  }`}
-                >
-                  {field.label}
-                </button>
-              ))}
-            </div>
-          </Card>
-
-          <Card className="p-4">
-            <h4 className="text-sm font-semibold mb-3">Filters</h4>
-            <div className="space-y-3">
-              <div>
-                <label className="text-xs text-slate-500 mb-1 block">Region</label>
-                <Select value={filterRegion} onValueChange={setFilterRegion}>
-                  <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Regions</SelectItem>
-                    {regions.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="text-xs text-slate-500 mb-1 block">Phase</label>
-                <Select value={filterPhase} onValueChange={setFilterPhase}>
-                  <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Phases</SelectItem>
-                    {phases.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-4">
-            <h4 className="text-sm font-semibold mb-3">Saved Templates</h4>
-            <div className="space-y-2 mb-3">
-              {savedTemplates.map((t, i) => (
-                <button
-                  key={i}
-                  onClick={() => setSelectedFields([...t.fields])}
-                  className="w-full text-left px-3 py-2 rounded-lg text-sm bg-slate-50 hover:bg-blue-50 transition-all"
-                >
-                  {t.name}
-                </button>
-              ))}
-            </div>
-            <div className="flex gap-2">
-              <Input
-                value={templateName}
-                onChange={(e) => setTemplateName(e.target.value)}
-                placeholder="Template name..."
-                className="h-8 text-sm"
-              />
-              <Button size="sm" variant="outline" onClick={handleSaveTemplate} disabled={!templateName}>
-                <Save className="w-3 h-3" />
-              </Button>
-            </div>
-          </Card>
+    <div className="grid grid-cols-4 gap-3">
+      <div className="space-y-3">
+        <div className="bg-white border border-slate-200 rounded-md p-3">
+          <h4 className={sectionLabel}>Fields</h4>
+          <div className="space-y-1">
+            {availableFields.map(field => (
+              <label
+                key={field.id}
+                className={cn(
+                  'flex items-center gap-2 px-2 py-1.5 rounded-sm text-[12px] cursor-pointer transition-colors',
+                  selectedFields.includes(field.id)
+                    ? 'bg-blue-50 text-blue-900'
+                    : 'hover:bg-slate-50 text-slate-700'
+                )}
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedFields.includes(field.id)}
+                  onChange={() => toggleField(field.id)}
+                  className="w-3 h-3"
+                />
+                <span>{field.label}</span>
+              </label>
+            ))}
+          </div>
         </div>
 
-        <div className="col-span-2">
-          <Card className="p-4">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <h4 className="text-sm font-semibold">Preview</h4>
-                <Badge variant="secondary" className="text-xs">{filteredCountries.length} rows</Badge>
-              </div>
-              <Button size="sm" onClick={handleExport}>
-                <Download className="w-4 h-4 mr-2" />
-                Export CSV
-              </Button>
+        <div className="bg-white border border-slate-200 rounded-md p-3">
+          <h4 className={sectionLabel}>Filters</h4>
+          <div className="space-y-2">
+            <div>
+              <label className="text-[10px] text-slate-500 mb-0.5 block">Region</label>
+              <Select value={filterRegion} onValueChange={setFilterRegion}>
+                <SelectTrigger className="h-8 text-[12px]"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Regions</SelectItem>
+                  {regions.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
+            <div>
+              <label className="text-[10px] text-slate-500 mb-0.5 block">Phase</label>
+              <Select value={filterPhase} onValueChange={setFilterPhase}>
+                <SelectTrigger className="h-8 text-[12px]"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Phases</SelectItem>
+                  {phases.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
 
-            <div className="overflow-auto max-h-[500px]">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    {selectedFields.map(f => (
-                      <TableHead key={f} className="text-xs">
-                        {availableFields.find(af => af.id === f)?.label}
-                      </TableHead>
-                    ))}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredCountries.map(c => (
-                    <TableRow key={c.id} className="hover:bg-slate-50">
-                      {selectedFields.map(f => (
-                        <TableCell key={f} className="text-sm">
-                          {f === 'name' ? (
-                            <span className="flex items-center gap-2">{c.flag} {c.name}</span>
-                          ) : f === 'progress' ? (
-                            <span>{c.progress}%</span>
-                          ) : f === 'ragStatus' ? (
-                            <Badge variant="outline" className={`text-xs ${
-                              c.ragStatus === 'Green' ? 'bg-emerald-100 text-emerald-700' :
-                              c.ragStatus === 'Amber' ? 'bg-amber-100 text-amber-700' :
-                              'bg-red-100 text-red-700'
-                            }`}>{c.ragStatus}</Badge>
-                          ) : (
-                            String((c as unknown as Record<string, unknown>)[f] || '')
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+        <div className="bg-white border border-slate-200 rounded-md p-3">
+          <h4 className={sectionLabel}>Templates</h4>
+          <div className="space-y-1 mb-2">
+            {savedTemplates.map((t, i) => (
+              <button
+                key={i}
+                onClick={() => setSelectedFields([...t.fields])}
+                className="w-full text-left px-2 py-1.5 rounded-sm text-[12px] hover:bg-blue-50 text-slate-700 transition-colors"
+              >
+                {t.name}
+              </button>
+            ))}
+          </div>
+          <div className="flex gap-1">
+            <Input
+              value={templateName}
+              onChange={(e) => setTemplateName(e.target.value)}
+              placeholder="Template name..."
+              className="h-7 text-[11px]"
+            />
+            <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={handleSaveTemplate} disabled={!templateName}>
+              <Save className="w-3 h-3" strokeWidth={1.75} />
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="col-span-3">
+        <div className="bg-white border border-slate-200 rounded-md">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200">
+            <div className="flex items-center gap-3">
+              <h4 className="text-[13px] font-semibold text-slate-900">Preview</h4>
+              <span className="text-[11px] text-slate-500 tabular-nums">{filteredCountries.length} rows</span>
             </div>
-          </Card>
+            <Button size="sm" className="h-7 text-[11px] bg-blue-700 hover:bg-blue-800" onClick={handleExport}>
+              <Download className="w-3 h-3 mr-1.5" strokeWidth={1.75} />
+              Export CSV
+            </Button>
+          </div>
+
+          <div className="overflow-auto max-h-[500px]">
+            <table className="w-full text-[12px] tabular-nums">
+              <thead className="sticky top-0 bg-white">
+                <tr className="border-b border-slate-200">
+                  {selectedFields.map(f => (
+                    <th key={f} className="text-left px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                      {availableFields.find(af => af.id === f)?.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {filteredCountries.map(c => (
+                  <tr key={c.id} className="hover:bg-slate-50 transition-colors">
+                    {selectedFields.map(f => (
+                      <td key={f} className="px-3 py-2">
+                        {f === 'name' ? (
+                          <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center justify-center w-7 h-5 rounded-sm bg-slate-100 text-[10px] font-semibold text-slate-700 border border-slate-200 tracking-wider">
+                              {getCountryCode(c.id)}
+                            </span>
+                            <span className="font-medium text-slate-900">{c.name}</span>
+                          </div>
+                        ) : f === 'progress' ? (
+                          <span className="text-slate-600">{c.progress}%</span>
+                        ) : f === 'ragStatus' ? (
+                          <span className={cn('inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider',
+                            c.ragStatus === 'Green' ? 'text-emerald-700' :
+                            c.ragStatus === 'Amber' ? 'text-amber-700' :
+                            'text-red-700'
+                          )}>
+                            <span className={cn('w-1.5 h-1.5 rounded-full',
+                              c.ragStatus === 'Green' ? 'bg-emerald-600' :
+                              c.ragStatus === 'Amber' ? 'bg-amber-600' :
+                              'bg-red-700'
+                            )} />
+                            {c.ragStatus}
+                          </span>
+                        ) : (
+                          <span className="text-slate-600">{String((c as unknown as Record<string, unknown>)[f] || '')}</span>
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

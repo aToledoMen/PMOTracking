@@ -3,10 +3,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { countries, users } from '@/data/mock-data';
+import { getCountryCode } from '@/lib/country-code';
 import { Priority, Task } from '@/data/types';
 import { X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface BulkAssignProps {
   open: boolean;
@@ -46,30 +47,32 @@ export function BulkAssign({ open, onClose, onAssign }: BulkAssignProps) {
     onClose();
   };
 
+  const labelCls = 'text-[10px] font-semibold uppercase tracking-wider text-slate-600 mb-1 block';
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Bulk Task Assignment</DialogTitle>
+          <DialogTitle className="text-[14px] font-semibold">Bulk Task Assignment</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4 py-4">
-          <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-3 py-3">
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-sm font-medium text-slate-700 mb-1 block">Task Title</label>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Task template title..." />
+              <label className={labelCls}>Task Title</label>
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Task template title..." className="h-8 text-[12px]" />
             </div>
             <div>
-              <label className="text-sm font-medium text-slate-700 mb-1 block">Description</label>
-              <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description..." />
+              <label className={labelCls}>Description</label>
+              <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description..." className="h-8 text-[12px]" />
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="text-sm font-medium text-slate-700 mb-1 block">Assign To</label>
+              <label className={labelCls}>Assign To</label>
               <Select value={assignedTo} onValueChange={setAssignedTo}>
-                <SelectTrigger><SelectValue placeholder="Select user" /></SelectTrigger>
+                <SelectTrigger className="h-8 text-[12px]"><SelectValue placeholder="Select user" /></SelectTrigger>
                 <SelectContent>
                   {users.map(u => (
                     <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
@@ -78,53 +81,55 @@ export function BulkAssign({ open, onClose, onAssign }: BulkAssignProps) {
               </Select>
             </div>
             <div>
-              <label className="text-sm font-medium text-slate-700 mb-1 block">Priority</label>
+              <label className={labelCls}>Priority</label>
               <Select value={priority} onValueChange={(v) => setPriority(v as Priority)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger className="h-8 text-[12px]"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="High">🔴 High</SelectItem>
-                  <SelectItem value="Medium">🟡 Medium</SelectItem>
-                  <SelectItem value="Low">🔵 Low</SelectItem>
+                  <SelectItem value="High">High</SelectItem>
+                  <SelectItem value="Medium">Medium</SelectItem>
+                  <SelectItem value="Low">Low</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div>
-              <label className="text-sm font-medium text-slate-700 mb-1 block">Due Date</label>
-              <Input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+              <label className={labelCls}>Due Date</label>
+              <Input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="h-8 text-[12px]" />
             </div>
           </div>
 
           <div>
-            <label className="text-sm font-medium text-slate-700 mb-2 block">
-              Select Countries ({selectedCountries.length} selected)
+            <label className={labelCls}>
+              Select Countries <span className="tabular-nums ml-1 text-slate-400">({selectedCountries.length})</span>
             </label>
             {selectedCountries.length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-3">
+              <div className="flex flex-wrap gap-1 mb-2">
                 {selectedCountries.map(id => {
                   const c = countries.find(co => co.id === id);
                   return c ? (
-                    <Badge key={id} variant="secondary" className="gap-1 pr-1">
-                      {c.flag} {c.name}
-                      <button onClick={() => toggleCountry(id)} className="ml-1 hover:bg-slate-300 rounded-full p-0.5">
-                        <X className="w-3 h-3" />
+                    <span key={id} className="inline-flex items-center gap-1 bg-blue-50 text-blue-800 text-[11px] px-1.5 py-0.5 rounded-sm border border-blue-200">
+                      <span className="font-semibold">{getCountryCode(c.id)}</span>
+                      <span>{c.name}</span>
+                      <button onClick={() => toggleCountry(id)} className="hover:bg-blue-100 rounded-full p-0.5">
+                        <X className="w-2.5 h-2.5" />
                       </button>
-                    </Badge>
+                    </span>
                   ) : null;
                 })}
               </div>
             )}
-            <div className="grid grid-cols-3 gap-2 max-h-48 overflow-auto p-1">
+            <div className="grid grid-cols-4 gap-1.5 max-h-52 overflow-auto border border-slate-200 rounded-sm p-2">
               {countries.map(c => (
                 <button
                   key={c.id}
                   onClick={() => toggleCountry(c.id)}
-                  className={`flex items-center gap-2 p-2 rounded-lg text-sm transition-all ${
+                  className={cn(
+                    'flex items-center gap-2 px-2 py-1.5 rounded-sm text-[11px] transition-colors',
                     selectedCountries.includes(c.id)
-                      ? 'bg-blue-100 text-blue-800 ring-2 ring-blue-500'
-                      : 'bg-slate-50 hover:bg-slate-100 text-slate-700'
-                  }`}
+                      ? 'bg-blue-50 text-blue-800 ring-1 ring-blue-500'
+                      : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200'
+                  )}
                 >
-                  <span>{c.flag}</span>
+                  <span className="font-semibold text-[10px] tracking-wider">{getCountryCode(c.id)}</span>
                   <span className="truncate">{c.name}</span>
                 </button>
               ))}
@@ -133,9 +138,9 @@ export function BulkAssign({ open, onClose, onAssign }: BulkAssignProps) {
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleAssign} disabled={!title || !assignedTo || selectedCountries.length === 0}>
-            Assign to {selectedCountries.length} Countries
+          <Button variant="outline" size="sm" className="h-8 text-[12px]" onClick={onClose}>Cancel</Button>
+          <Button size="sm" className="h-8 text-[12px] bg-blue-700 hover:bg-blue-800" onClick={handleAssign} disabled={!title || !assignedTo || selectedCountries.length === 0}>
+            Assign to {selectedCountries.length} {selectedCountries.length === 1 ? 'Country' : 'Countries'}
           </Button>
         </DialogFooter>
       </DialogContent>

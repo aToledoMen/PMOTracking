@@ -1,42 +1,45 @@
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { countries, tasks, users } from '@/data/mock-data';
-import { AlertTriangle } from 'lucide-react';
+import { getCountryCode } from '@/lib/country-code';
+import { cn } from '@/lib/utils';
 
 export function EscalationsTable() {
   const escalatedTasks = tasks
     .filter(t => t.status === 'Overdue' || t.status === 'Blocked')
     .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
-    .slice(0, 5);
+    .slice(0, 6);
 
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-white border border-slate-200 rounded-md">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
         <div>
-          <h3 className="text-sm font-semibold text-slate-900">Top Escalations</h3>
-          <p className="text-xs text-slate-500">Tasks requiring immediate attention</p>
+          <h3 className="text-[13px] font-semibold text-slate-900">Top Escalations</h3>
+          <p className="text-[11px] text-slate-500">Requiring attention · {escalatedTasks.length} items</p>
         </div>
-        <AlertTriangle className="w-5 h-5 text-amber-500" />
       </div>
-      <div className="space-y-2">
+      <div className="divide-y divide-slate-100">
         {escalatedTasks.map((task) => {
           const country = countries.find(c => c.id === task.country);
           const assignee = users.find(u => u.id === task.assignedTo);
           const daysOverdue = Math.ceil((new Date().getTime() - new Date(task.dueDate).getTime()) / (1000 * 60 * 60 * 24));
           return (
-            <div key={task.id} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 hover:bg-red-50/50 transition-colors">
-              <span className="text-lg">{country?.flag}</span>
+            <div key={task.id} className="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors">
+              <span className="inline-flex items-center justify-center w-7 h-5 rounded-sm bg-slate-100 text-[10px] font-semibold text-slate-700 border border-slate-200 tracking-wider">
+                {getCountryCode(task.country)}
+              </span>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-slate-900 truncate">{task.title}</p>
-                <p className="text-xs text-slate-500">{assignee?.name} · {country?.name}</p>
+                <p className="text-[12px] font-medium text-slate-900 truncate">{task.title}</p>
+                <p className="text-[10px] text-slate-500">{assignee?.name} · {country?.name}</p>
               </div>
-              <Badge variant={task.status === 'Overdue' ? 'destructive' : 'outline'} className="text-xs">
-                {task.status === 'Overdue' ? `${daysOverdue}d overdue` : 'Blocked'}
-              </Badge>
+              <span className={cn(
+                'inline-flex items-center gap-1 text-[10px] font-medium uppercase tracking-wider px-1.5 py-0.5 rounded-sm',
+                task.status === 'Overdue' ? 'text-red-700 bg-red-50' : 'text-amber-700 bg-amber-50'
+              )}>
+                {task.status === 'Overdue' ? `${daysOverdue}d OVERDUE` : 'BLOCKED'}
+              </span>
             </div>
           );
         })}
       </div>
-    </Card>
+    </div>
   );
 }

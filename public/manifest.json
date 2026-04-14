@@ -1,12 +1,12 @@
 {
-  "name": "my-domo-app",
-  "version": "0.0.1",
+  "name": "PMO Tracker",
+  "version": "1.0.0",
   "size": {
-    "width": 3,
-    "height": 3
+    "width": 4,
+    "height": 4
   },
   "fileName": "manifest.json",
   "datasetsMapping": [],
-  "id": "",
-  "proxyId": ""
+  "id": "dcd6097e-d599-4625-a5c8-8b4e54268547",
+  "proxyId": "3151df94-8c83-40ec-bba9-070dadaac2bd"
 }

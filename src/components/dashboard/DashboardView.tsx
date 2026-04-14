@@ -15,55 +15,50 @@ export function DashboardView() {
   const onTimeTrend = Math.round(latestKPI.onTimeRate - prevKPI.onTimeRate);
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <KPICard
           title="Active Countries"
           value={activeCountries}
           icon={Globe}
-          color="blue"
           trend={8}
           trendLabel="vs last month"
           delay={0}
         />
         <KPICard
-          title="On-Time Go-Live Rate"
+          title="On-Time Go-Live"
           value={latestKPI.onTimeRate}
           suffix="%"
           icon={Target}
-          color="emerald"
           trend={onTimeTrend}
           trendLabel="vs last week"
-          delay={100}
+          delay={60}
         />
         <KPICard
-          title="Avg Days per Phase"
+          title="Avg Days / Phase"
           value={latestKPI.avgDaysPerPhase}
-          suffix=" days"
           icon={Clock}
-          color="violet"
           trend={-3}
           trendLabel="improvement"
-          delay={200}
+          delay={120}
         />
         <KPICard
           title="Overdue Tasks"
           value={overdueCount}
           icon={AlertTriangle}
-          color="red"
           trend={12}
           trendLabel="vs last week"
-          delay={300}
+          delay={180}
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <RAGStatusChart />
         <PhaseProgress />
         <TrendChart />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <TimelineChart />
         <EscalationsTable />
       </div>

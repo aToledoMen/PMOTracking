@@ -1,39 +1,28 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { Card } from '@/components/ui/card';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { getCountriesByPhase } from '@/data/mock-data';
-
-const phaseColors: Record<string, string> = {
-  Discovery: '#8b5cf6',
-  Planning: '#6366f1',
-  Build: '#3b82f6',
-  UAT: '#06b6d4',
-  'Go-Live': '#10b981',
-  Hypercare: '#14b8a6',
-};
 
 export function PhaseProgress() {
   const data = getCountriesByPhase();
 
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
-      <h3 className="text-sm font-semibold text-slate-900 mb-1">Countries by Phase</h3>
-      <p className="text-xs text-slate-500 mb-4">Current deployment phase distribution</p>
-      <ResponsiveContainer width="100%" height={220}>
-        <BarChart data={data} barCategoryGap="20%">
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-          <XAxis dataKey="phase" tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
-          <YAxis tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
+    <div className="bg-white border border-slate-200 rounded-md p-4">
+      <div className="mb-3">
+        <h3 className="text-[13px] font-semibold text-slate-900">Countries by Phase</h3>
+        <p className="text-[11px] text-slate-500">Deployment phase distribution</p>
+      </div>
+      <ResponsiveContainer width="100%" height={180}>
+        <BarChart data={data} barCategoryGap="25%" margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="2 2" vertical={false} stroke="#f1f5f9" />
+          <XAxis dataKey="phase" tick={{ fontSize: 10, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
+          <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} axisLine={false} tickLine={false} width={30} />
           <Tooltip
-            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
+            cursor={{ fill: '#f8fafc' }}
+            contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0', fontSize: '11px', padding: '4px 8px' }}
             formatter={(value) => [`${value} countries`, 'Count']}
           />
-          <Bar dataKey="count" radius={[6, 6, 0, 0]}>
-            {data.map((entry) => (
-              <Cell key={entry.phase} fill={phaseColors[entry.phase] || '#3b82f6'} />
-            ))}
-          </Bar>
+          <Bar dataKey="count" fill="#1d4ed8" radius={[2, 2, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
-    </Card>
+    </div>
   );
 }

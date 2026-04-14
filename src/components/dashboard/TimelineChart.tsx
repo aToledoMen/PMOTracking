@@ -1,52 +1,55 @@
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { getUpcomingGoLives } from '@/data/mock-data';
-import { Calendar, ArrowRight } from 'lucide-react';
+import { getCountryCode } from '@/lib/country-code';
+import { cn } from '@/lib/utils';
 
-const ragColors = {
-  Green: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-  Amber: 'bg-amber-100 text-amber-700 border-amber-200',
-  Red: 'bg-red-100 text-red-700 border-red-200',
+const ragStyles = {
+  Green: { dot: 'bg-emerald-600', label: 'text-emerald-700' },
+  Amber: { dot: 'bg-amber-600', label: 'text-amber-700' },
+  Red: { dot: 'bg-red-700', label: 'text-red-700' },
 };
 
 export function TimelineChart() {
   const upcoming = getUpcomingGoLives(60);
 
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-white border border-slate-200 rounded-md">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
         <div>
-          <h3 className="text-sm font-semibold text-slate-900">Upcoming Go-Lives</h3>
-          <p className="text-xs text-slate-500">Next 60 days</p>
+          <h3 className="text-[13px] font-semibold text-slate-900">Upcoming Go-Lives</h3>
+          <p className="text-[11px] text-slate-500">Next 60 days · {upcoming.length} deployments</p>
         </div>
-        <Calendar className="w-5 h-5 text-slate-400" />
       </div>
-      <div className="space-y-3">
+      <div className="divide-y divide-slate-100">
         {upcoming.length === 0 ? (
-          <p className="text-sm text-slate-400 text-center py-4">No go-lives in the next 60 days</p>
+          <p className="text-[12px] text-slate-400 text-center py-6">No go-lives in the next 60 days</p>
         ) : (
-          upcoming.map((country) => {
+          upcoming.slice(0, 6).map((country) => {
             const daysLeft = Math.ceil((new Date(country.goLiveDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+            const rs = ragStyles[country.ragStatus];
             return (
-              <div key={country.id} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors group">
-                <span className="text-xl">{country.flag}</span>
+              <div key={country.id} className="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors">
+                <span className="inline-flex items-center justify-center w-7 h-5 rounded-sm bg-slate-100 text-[10px] font-semibold text-slate-700 border border-slate-200 tracking-wider">
+                  {getCountryCode(country.id)}
+                </span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-slate-900">{country.name}</p>
-                  <p className="text-xs text-slate-500">{country.partner}</p>
+                  <p className="text-[12px] font-medium text-slate-900 truncate">{country.name}</p>
+                  <p className="text-[10px] text-slate-500">{country.partner}</p>
                 </div>
-                <Badge variant="outline" className={ragColors[country.ragStatus]}>
-                  {country.ragStatus}
-                </Badge>
-                <div className="text-right">
-                  <p className="text-sm font-bold text-slate-900">{daysLeft}d</p>
-                  <p className="text-[10px] text-slate-500">{country.goLiveDate}</p>
+                <div className="flex items-center gap-1.5">
+                  <span className={cn('w-1.5 h-1.5 rounded-full', rs.dot)} />
+                  <span className={cn('text-[10px] font-medium uppercase tracking-wider', rs.label)}>
+                    {country.ragStatus}
+                  </span>
                 </div>
-                <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                <div className="text-right min-w-[55px]">
+                  <p className="text-[12px] font-semibold text-slate-900 tabular-nums leading-none">{daysLeft}d</p>
+                  <p className="text-[9px] text-slate-400 tabular-nums mt-0.5">{country.goLiveDate}</p>
+                </div>
               </div>
             );
           })
         )}
       </div>
-    </Card>
+    </div>
   );
 }

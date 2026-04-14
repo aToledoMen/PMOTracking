@@ -1,14 +1,15 @@
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { countries, kpiHistory, tasks } from '@/data/mock-data';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { getRAGSummary } from '@/data/mock-data';
+import { getCountryCode } from '@/lib/country-code';
 import { Target, Globe, AlertTriangle, CheckCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export function ExecutiveSummary() {
   const rag = getRAGSummary();
   const total = rag.Green + rag.Amber + rag.Red;
   const latestKPI = kpiHistory[kpiHistory.length - 1];
+
   const quarterData = [
     { quarter: 'Q1 2026', count: countries.filter(c => ['2026-01', '2026-02', '2026-03'].some(m => c.goLiveDate.startsWith(m))).length },
     { quarter: 'Q2 2026', count: countries.filter(c => ['2026-04', '2026-05', '2026-06'].some(m => c.goLiveDate.startsWith(m))).length },
@@ -16,128 +17,118 @@ export function ExecutiveSummary() {
     { quarter: 'Q4 2026', count: countries.filter(c => ['2026-10', '2026-11', '2026-12'].some(m => c.goLiveDate.startsWith(m))).length },
   ];
 
-  const escalations = tasks.filter(t => t.status === 'Blocked' || t.status === 'Overdue').slice(0, 3);
+  const escalations = tasks.filter(t => t.status === 'Blocked' || t.status === 'Overdue').slice(0, 4);
   const ragData = [
-    { name: 'On Track', value: rag.Green, color: '#10b981' },
-    { name: 'At Risk', value: rag.Amber, color: '#f59e0b' },
-    { name: 'Off Track', value: rag.Red, color: '#ef4444' },
+    { name: 'On Track', value: rag.Green, color: '#15803d' },
+    { name: 'At Risk', value: rag.Amber, color: '#b45309' },
+    { name: 'Off Track', value: rag.Red, color: '#b91c1c' },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="font-semibold text-slate-900 text-lg">Executive Summary</h3>
-          <p className="text-sm text-slate-500">Leadership dashboard — {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+          <h3 className="text-[14px] font-semibold text-slate-900">Executive Summary</h3>
+          <p className="text-[11px] text-slate-500">Leadership dashboard · {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
         </div>
-        <Badge variant="outline" className="text-xs">Auto-generated</Badge>
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 px-2 py-1 border border-slate-200 rounded-sm">
+          Auto-generated
+        </span>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
-        <Card className="p-5">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-              <Globe className="w-5 h-5 text-blue-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold">{total}</p>
-              <p className="text-xs text-slate-500">Total Countries</p>
-            </div>
-          </div>
-        </Card>
-        <Card className="p-5">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
-              <Target className="w-5 h-5 text-emerald-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold">{latestKPI.onTimeRate}%</p>
-              <p className="text-xs text-slate-500">On-Time Rate</p>
-            </div>
-          </div>
-        </Card>
-        <Card className="p-5">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
-              <CheckCircle className="w-5 h-5 text-emerald-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold">{Math.round((rag.Green / total) * 100)}%</p>
-              <p className="text-xs text-slate-500">Portfolio Health</p>
-            </div>
-          </div>
-        </Card>
-        <Card className="p-5">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center">
-              <AlertTriangle className="w-5 h-5 text-red-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold">{escalations.length}</p>
-              <p className="text-xs text-slate-500">Escalations</p>
-            </div>
-          </div>
-        </Card>
+      <div className="grid grid-cols-4 gap-3">
+        <StatCard label="Total Countries" value={total} icon={Globe} color="text-blue-700" />
+        <StatCard label="On-Time Rate" value={`${latestKPI.onTimeRate}%`} icon={Target} color="text-emerald-700" />
+        <StatCard label="Portfolio Health" value={`${Math.round((rag.Green / total) * 100)}%`} icon={CheckCircle} color="text-emerald-700" />
+        <StatCard label="Escalations" value={escalations.length} icon={AlertTriangle} color="text-red-700" />
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
-        <Card className="p-6">
-          <h4 className="text-sm font-semibold mb-4">Go-Live Pipeline by Quarter</h4>
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={quarterData}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-              <XAxis dataKey="quarter" tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }} />
-              <Bar dataKey="count" fill="#6366f1" radius={[6, 6, 0, 0]} name="Go-Lives" />
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-white border border-slate-200 rounded-md p-4">
+          <h4 className="text-[13px] font-semibold text-slate-900 mb-3">Go-Live Pipeline</h4>
+          <ResponsiveContainer width="100%" height={180}>
+            <BarChart data={quarterData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="2 2" vertical={false} stroke="#f1f5f9" />
+              <XAxis dataKey="quarter" tick={{ fontSize: 10, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} axisLine={false} tickLine={false} width={30} />
+              <Tooltip
+                cursor={{ fill: '#f8fafc' }}
+                contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0', fontSize: '11px', padding: '4px 8px' }}
+              />
+              <Bar dataKey="count" fill="#1d4ed8" radius={[2, 2, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
-        </Card>
+        </div>
 
-        <Card className="p-6">
-          <h4 className="text-sm font-semibold mb-4">Portfolio RAG Distribution</h4>
-          <div className="flex items-center gap-8">
-            <div className="w-36 h-36">
+        <div className="bg-white border border-slate-200 rounded-md p-4">
+          <h4 className="text-[13px] font-semibold text-slate-900 mb-3">RAG Distribution</h4>
+          <div className="flex items-center gap-6">
+            <div className="w-32 h-32 flex-shrink-0">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={ragData} cx="50%" cy="50%" innerRadius={40} outerRadius={65} paddingAngle={3} dataKey="value" strokeWidth={0}>
+                  <Pie data={ragData} cx="50%" cy="50%" innerRadius={38} outerRadius={58} paddingAngle={2} dataKey="value" strokeWidth={0}>
                     {ragData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className="space-y-3">
+            <div className="flex-1 space-y-2">
               {ragData.map(item => (
-                <div key={item.name} className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="text-sm text-slate-600 w-20">{item.name}</span>
-                  <span className="text-sm font-bold">{item.value}</span>
-                  <span className="text-xs text-slate-400">({Math.round((item.value / total) * 100)}%)</span>
+                <div key={item.name} className="flex items-center justify-between text-[12px]">
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: item.color }} />
+                    <span className="text-slate-600">{item.name}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 tabular-nums">
+                    <span className="font-semibold text-slate-900">{item.value}</span>
+                    <span className="text-[10px] text-slate-400">{Math.round((item.value / total) * 100)}%</span>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-        </Card>
+        </div>
       </div>
 
-      <Card className="p-6">
-        <h4 className="text-sm font-semibold mb-4">Top Escalations Requiring Decision</h4>
-        <div className="space-y-3">
+      <div className="bg-white border border-slate-200 rounded-md">
+        <div className="px-4 py-3 border-b border-slate-200">
+          <h4 className="text-[13px] font-semibold text-slate-900">Escalations Requiring Decision</h4>
+        </div>
+        <div className="divide-y divide-slate-100">
           {escalations.map(t => {
             const country = countries.find(c => c.id === t.country);
             return (
-              <div key={t.id} className="flex items-center gap-3 p-3 rounded-xl bg-red-50/50">
-                <span className="text-lg">{country?.flag}</span>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">{t.title}</p>
-                  <p className="text-xs text-slate-500">{country?.name} · Due: {t.dueDate}</p>
+              <div key={t.id} className="flex items-center gap-3 px-4 py-2.5">
+                <span className="inline-flex items-center justify-center w-7 h-5 rounded-sm bg-slate-100 text-[10px] font-semibold text-slate-700 border border-slate-200 tracking-wider">
+                  {getCountryCode(t.country)}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[12px] font-medium text-slate-900 truncate">{t.title}</p>
+                  <p className="text-[10px] text-slate-500">{country?.name} · Due {t.dueDate}</p>
                 </div>
-                <Badge variant="destructive" className="text-xs">{t.status}</Badge>
+                <span className={cn(
+                  'inline-flex items-center text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-sm',
+                  t.status === 'Overdue' ? 'text-red-700 bg-red-50' : 'text-amber-700 bg-amber-50'
+                )}>
+                  {t.status}
+                </span>
               </div>
             );
           })}
         </div>
-      </Card>
+      </div>
+    </div>
+  );
+}
+
+function StatCard({ label, value, icon: Icon, color }: { label: string; value: string | number; icon: React.ElementType; color: string }) {
+  return (
+    <div className="bg-white border border-slate-200 rounded-md px-4 py-3">
+      <div className="flex items-center justify-between mb-1">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">{label}</p>
+        <Icon className="w-3.5 h-3.5 text-slate-400" strokeWidth={1.75} />
+      </div>
+      <p className={cn('text-2xl font-semibold tabular-nums tracking-tight leading-none', color)}>{value}</p>
     </div>
   );
 }
