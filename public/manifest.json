@@ -2,11 +2,29 @@
   "name": "PMO Tracker",
   "version": "1.0.0",
   "size": {
-    "width": 4,
-    "height": 4
+     "width": 4,
+     "height": 4
   },
   "fileName": "manifest.json",
-  "datasetsMapping": [],
-  "id": "dcd6097e-d599-4625-a5c8-8b4e54268547",
-  "proxyId": "3151df94-8c83-40ec-bba9-070dadaac2bd"
+  "scopes": [
+     "data",
+     "user",
+     "collections"
+  ],
+  "id": "3bb12513-26d5-428d-805a-01133cf50236",
+  "proxyId": "16174cf1-829c-4612-b5a1-ff8ee1b16d69",
+  "datasetsMapping": [
+     {
+        "alias": "pmocountries",
+        "dataSetId": "26dd44ed-10c6-4cdd-9e3f-9db06ecd6136",
+        "fields": []
+     }
+  ],
+  "collectionsMapping": [
+     {
+        "id": "01aab2a2-029f-4172-a7c0-9c6ea40abbe9",
+        "name": "tasks",
+        "syncEnabled": false
+     }
+  ]
 }

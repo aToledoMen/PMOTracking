@@ -158,23 +158,23 @@ export function getTasksByUser(userId: string) {
   });
 }
 
-export function getCountriesByPhase() {
+export function getCountriesByPhase(list: Country[] = countries) {
   const result: Record<string, number> = { Discovery: 0, Planning: 0, Build: 0, UAT: 0, 'Go-Live': 0, Hypercare: 0 };
-  countries.forEach(c => result[c.phase]++);
+  list.forEach(c => result[c.phase]++);
   return Object.entries(result).map(([phase, count]) => ({ phase: phase as DeploymentPhase, count }));
 }
 
-export function getRAGSummary() {
+export function getRAGSummary(list: Country[] = countries) {
   const result = { Green: 0, Amber: 0, Red: 0 };
-  countries.forEach(c => result[c.ragStatus]++);
+  list.forEach(c => result[c.ragStatus]++);
   return result;
 }
 
-export function getUpcomingGoLives(days: number = 30) {
+export function getUpcomingGoLives(days: number = 30, list: Country[] = countries) {
   const now = new Date();
   const limit = new Date();
   limit.setDate(limit.getDate() + days);
-  return countries.filter(c => {
+  return list.filter(c => {
     const d = new Date(c.goLiveDate);
     return d >= now && d <= limit;
   }).sort((a, b) => new Date(a.goLiveDate).getTime() - new Date(b.goLiveDate).getTime());

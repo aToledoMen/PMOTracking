@@ -6,7 +6,8 @@ import { TaskCard } from './TaskCard';
 import { TaskDialog } from './TaskDialog';
 import { BulkAssign } from './BulkAssign';
 import { Task, TaskStatus } from '@/data/types';
-import { countries } from '@/data/mock-data';
+import { TaskWithDocId } from '@/data/domo-api';
+import { useData } from '@/data/data-context';
 import { Plus, Users, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -27,11 +28,6 @@ const columns: { status: TaskStatus; label: string; topBorder: string; dot: stri
   { status: 'Completed', label: 'Completed', topBorder: 'border-t-emerald-700', dot: 'bg-emerald-700' },
 ];
 
-interface TaskBoardProps {
-  allTasks: Task[];
-  onTasksChange: (tasks: Task[]) => void;
-}
-
 function DroppableColumn({
   status,
   label,
@@ -44,8 +40,8 @@ function DroppableColumn({
   label: string;
   topBorder: string;
   dot: string;
-  tasks: Task[];
-  onEdit: (t: Task) => void;
+  tasks: TaskWithDocId[];
+  onEdit: (t: TaskWithDocId) => void;
 }) {
   const { isOver, setNodeRef } = useDroppable({ id: status });
   return (
@@ -73,25 +69,28 @@ function DroppableColumn({
   );
 }
 
-export function TaskBoard({ allTasks, onTasksChange }: TaskBoardProps) {
+export function TaskBoard() {
+  const { tasks, countries, createTask, updateTask, bulkAddTasks } = useData();
   const [showDialog, setShowDialog] = useState(false);
   const [showBulk, setShowBulk] = useState(false);
-  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [editingTask, setEditingTask] = useState<TaskWithDocId | null>(null);
   const [filterCountry, setFilterCountry] = useState<string>('all');
   const [filterPriority, setFilterPriority] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [activeTask, setActiveTask] = useState<TaskWithDocId | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
 
-  const filteredTasks = allTasks.filter(t => {
+  console.log('[Filter] State:', { filterCountry, filterPriority, searchQuery, totalTasks: tasks.length });
+  const filteredTasks = tasks.filter(t => {
     if (filterCountry !== 'all' && t.country !== filterCountry) return false;
     if (filterPriority !== 'all' && t.priority !== filterPriority) return false;
     if (searchQuery && !t.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     return true;
   });
+  console.log('[Filter] Filtered count:', filteredTasks.length);
 
   const getColumnTasks = (status: TaskStatus) => {
     if (status === 'Open') {
@@ -100,21 +99,21 @@ export function TaskBoard({ allTasks, onTasksChange }: TaskBoardProps) {
     return filteredTasks.filter(t => t.status === status);
   };
 
-  const handleSave = (taskData: Partial<Task>) => {
-    const existing = allTasks.find(t => t.id === taskData.id);
+  const handleSave = async (taskData: Partial<Task>) => {
+    const existing = tasks.find(t => t.id === taskData.id);
     if (existing) {
-      onTasksChange(allTasks.map(t => t.id === taskData.id ? { ...t, ...taskData } as Task : t));
+      await updateTask({ ...existing, ...taskData } as TaskWithDocId);
     } else {
-      onTasksChange([...allTasks, taskData as Task]);
+      await createTask(taskData as Task);
     }
   };
 
-  const handleBulkAssign = (newTasks: Partial<Task>[]) => {
-    onTasksChange([...allTasks, ...(newTasks as Task[])]);
+  const handleBulkAssign = async (newTasks: Partial<Task>[]) => {
+    await bulkAddTasks(newTasks as Task[]);
   };
 
   const handleDragStart = (event: DragStartEvent) => {
-    const task = allTasks.find(t => t.id === event.active.id);
+    const task = tasks.find(t => t.id === event.active.id);
     if (task) setActiveTask(task);
   };
 
@@ -125,16 +124,10 @@ export function TaskBoard({ allTasks, onTasksChange }: TaskBoardProps) {
 
     const taskId = active.id as string;
     const newStatus = over.id as TaskStatus;
-    const task = allTasks.find(t => t.id === taskId);
+    const task = tasks.find(t => t.id === taskId);
     if (!task || task.status === newStatus) return;
 
-    onTasksChange(
-      allTasks.map(t =>
-        t.id === taskId
-          ? { ...t, status: newStatus, updatedAt: new Date().toISOString().split('T')[0] }
-          : t
-      )
-    );
+    updateTask({ ...task, status: newStatus, updatedAt: new Date().toISOString().split('T')[0] });
   };
 
   return (

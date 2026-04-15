@@ -1,6 +1,7 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Task, TaskStatus } from '@/data/types';
-import { countries, currentUser } from '@/data/mock-data';
+import { TaskStatus } from '@/data/types';
+import { currentUser } from '@/data/mock-data';
+import { useData } from '@/data/data-context';
 import { getCountryCode } from '@/lib/country-code';
 import { cn } from '@/lib/utils';
 import { Calendar } from 'lucide-react';
@@ -19,13 +20,10 @@ const priorityStyle = {
   Low: 'text-blue-700',
 };
 
-interface MyTasksViewProps {
-  allTasks: Task[];
-  onTasksChange: (tasks: Task[]) => void;
-}
+export function MyTasksView() {
+  const { tasks, countries, updateTask } = useData();
 
-export function MyTasksView({ allTasks, onTasksChange }: MyTasksViewProps) {
-  const myTasks = allTasks
+  const myTasks = tasks
     .filter(t => t.assignedTo === currentUser.id)
     .sort((a, b) => {
       if (a.status === 'Overdue' && b.status !== 'Overdue') return -1;
@@ -38,7 +36,9 @@ export function MyTasksView({ allTasks, onTasksChange }: MyTasksViewProps) {
   const completed = myTasks.filter(t => t.status === 'Completed').length;
 
   const handleStatusChange = (taskId: string, newStatus: TaskStatus) => {
-    onTasksChange(allTasks.map(t => t.id === taskId ? { ...t, status: newStatus, updatedAt: new Date().toISOString().split('T')[0] } : t));
+    const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
+    updateTask({ ...task, status: newStatus, updatedAt: new Date().toISOString().split('T')[0] });
   };
 
   return (

@@ -1,8 +1,10 @@
-import { countries, tasks, users } from '@/data/mock-data';
+import { users } from '@/data/mock-data';
 import { getCountryCode } from '@/lib/country-code';
+import { useData } from '@/data/data-context';
 import { cn } from '@/lib/utils';
 
 export function EscalationsTable() {
+  const { countries, tasks } = useData();
   const escalatedTasks = tasks
     .filter(t => t.status === 'Overdue' || t.status === 'Blocked')
     .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())

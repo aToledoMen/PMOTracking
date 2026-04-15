@@ -30,10 +30,36 @@ function domoProxyPlugin(): Plugin {
             // Dynamically import to handle potential errors gracefully
             const { getProxyMiddleware } = await import('./proxy-setup.js')
             const proxyMiddleware = getProxyMiddleware()
-            
-            // Use the proxy middleware
+
+            // Shim Express-style res.status() on top of Node's ServerResponse
+            // so @domoinc/ryuu-proxy works with Vite's raw middleware.
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            proxyMiddleware(req as any, res as any, next)
+            const r = res as any
+            if (typeof r.status !== 'function') {
+              r.status = function (code: number) {
+                r.statusCode = code
+                return r
+              }
+            }
+            if (typeof r.send !== 'function') {
+              r.send = function (body: unknown) {
+                const payload = typeof body === 'string' ? body : JSON.stringify(body)
+                r.setHeader?.('Content-Type',
+                  typeof body === 'string' ? 'text/plain' : 'application/json')
+                r.end(payload)
+                return r
+              }
+            }
+            if (typeof r.json !== 'function') {
+              r.json = function (body: unknown) {
+                r.setHeader?.('Content-Type', 'application/json')
+                r.end(JSON.stringify(body))
+                return r
+              }
+            }
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            proxyMiddleware(req as any, r, next)
           } catch (error) {
             // If proxy setup fails, continue without it
             console.warn('⚠️  Domo proxy not available:', error instanceof Error ? error.message : error)

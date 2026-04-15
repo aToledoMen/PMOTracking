@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { countries, users } from '@/data/mock-data';
+import { users } from '@/data/mock-data';
+import { useData } from '@/data/data-context';
 import { getCountryCode } from '@/lib/country-code';
 import { Priority, Task } from '@/data/types';
 import { X } from 'lucide-react';
@@ -16,12 +17,25 @@ interface BulkAssignProps {
 }
 
 export function BulkAssign({ open, onClose, onAssign }: BulkAssignProps) {
+  const { countries } = useData();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [assignedTo, setAssignedTo] = useState('');
   const [priority, setPriority] = useState<Priority>('Medium');
   const [dueDate, setDueDate] = useState('');
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+
+  // Reset form whenever dialog opens
+  useEffect(() => {
+    if (open) {
+      setTitle('');
+      setDescription('');
+      setAssignedTo('');
+      setPriority('Medium');
+      setDueDate('');
+      setSelectedCountries([]);
+    }
+  }, [open]);
 
   const toggleCountry = (id: string) => {
     setSelectedCountries(prev =>

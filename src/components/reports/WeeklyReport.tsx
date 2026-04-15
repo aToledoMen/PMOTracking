@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { countries, tasks } from '@/data/mock-data';
+import { useData } from '@/data/data-context';
 import { getCountryCode } from '@/lib/country-code';
 import { Download, FileSpreadsheet } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -12,6 +12,7 @@ const ragStyle = {
 };
 
 export function WeeklyReport() {
+  const { countries, tasks } = useData();
   const handleExport = () => {
     const header = 'Country,Region,Phase,RAG Status,Progress,Partner,Go-Live Date\n';
     const rows = countries.map(c =>

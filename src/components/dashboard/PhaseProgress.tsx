@@ -1,8 +1,10 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { getCountriesByPhase } from '@/data/mock-data';
+import { useData } from '@/data/data-context';
 
 export function PhaseProgress() {
-  const data = getCountriesByPhase();
+  const { countries } = useData();
+  const data = getCountriesByPhase(countries);
 
   return (
     <div className="bg-white border border-slate-200 rounded-md p-4">

@@ -6,12 +6,12 @@ import { TaskBoard } from '@/components/tasks/TaskBoard';
 import { MyTasksView } from '@/components/tasks/MyTasksView';
 import { ReportsView } from '@/components/reports/ReportsView';
 import { NotificationPanel } from '@/components/notifications/NotificationPanel';
-import { tasks as initialTasks, notifications as initialNotifications } from '@/data/mock-data';
-import { Task, Notification } from '@/data/types';
+import { notifications as initialNotifications } from '@/data/mock-data';
+import { DataProvider } from '@/data/data-context';
+import { Notification } from '@/data/types';
 
-function App() {
+function AppInner() {
   const [activeView, setActiveView] = useState<ViewType>('dashboard');
-  const [allTasks, setAllTasks] = useState<Task[]>(initialTasks);
   const [allNotifications, setAllNotifications] = useState<Notification[]>(initialNotifications);
 
   const unreadCount = allNotifications.filter(n => !n.read).length;
@@ -31,9 +31,9 @@ function App() {
       case 'dashboard':
         return <DashboardView />;
       case 'tasks':
-        return <TaskBoard allTasks={allTasks} onTasksChange={setAllTasks} />;
+        return <TaskBoard />;
       case 'my-tasks':
-        return <MyTasksView allTasks={allTasks} onTasksChange={setAllTasks} />;
+        return <MyTasksView />;
       case 'reports':
         return <ReportsView />;
       case 'notifications':
@@ -55,6 +55,14 @@ function App() {
     >
       {renderView()}
     </AppLayout>
+  );
+}
+
+function App() {
+  return (
+    <DataProvider>
+      <AppInner />
+    </DataProvider>
   );
 }
 

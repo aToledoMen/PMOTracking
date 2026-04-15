@@ -5,9 +5,11 @@ import { PhaseProgress } from './PhaseProgress';
 import { TrendChart } from './TrendChart';
 import { TimelineChart } from './TimelineChart';
 import { EscalationsTable } from './EscalationsTable';
-import { countries, tasks, kpiHistory } from '@/data/mock-data';
+import { kpiHistory } from '@/data/mock-data';
+import { useData } from '@/data/data-context';
 
 export function DashboardView() {
+  const { countries, tasks } = useData();
   const activeCountries = countries.filter(c => c.phase !== 'Hypercare').length;
   const overdueCount = tasks.filter(t => t.status === 'Overdue').length;
   const latestKPI = kpiHistory[kpiHistory.length - 1];

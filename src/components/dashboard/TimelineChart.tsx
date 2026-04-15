@@ -1,5 +1,6 @@
 import { getUpcomingGoLives } from '@/data/mock-data';
 import { getCountryCode } from '@/lib/country-code';
+import { useData } from '@/data/data-context';
 import { cn } from '@/lib/utils';
 
 const ragStyles = {
@@ -9,7 +10,8 @@ const ragStyles = {
 };
 
 export function TimelineChart() {
-  const upcoming = getUpcomingGoLives(60);
+  const { countries } = useData();
+  const upcoming = getUpcomingGoLives(60, countries);
 
   return (
     <div className="bg-white border border-slate-200 rounded-md">

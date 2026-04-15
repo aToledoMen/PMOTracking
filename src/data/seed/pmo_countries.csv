@@ -1,0 +1,26 @@
+country_id,country_name,region,phase,rag_status,go_live_date,partner,progress
+c1,United States,North America,Hypercare,Green,2026-02-15,Accenture,95
+c2,United Kingdom,Europe,Go-Live,Green,2026-04-01,Deloitte,88
+c3,Germany,Europe,UAT,Amber,2026-05-10,Deloitte,72
+c4,France,Europe,UAT,Green,2026-05-20,Capgemini,70
+c5,Japan,Asia Pacific,Build,Amber,2026-07-01,Fujitsu,48
+c6,Brazil,Latin America,Build,Red,2026-06-15,KPMG,40
+c7,Australia,Asia Pacific,Go-Live,Green,2026-04-10,PwC,85
+c8,Canada,North America,Hypercare,Green,2026-03-01,Accenture,92
+c9,Mexico,Latin America,Planning,Amber,2026-09-01,KPMG,22
+c10,India,Asia Pacific,Build,Green,2026-07-15,Infosys,45
+c11,Spain,Europe,Planning,Green,2026-08-20,Capgemini,25
+c12,Italy,Europe,Discovery,Amber,2026-10-01,Deloitte,10
+c13,South Korea,Asia Pacific,UAT,Green,2026-05-30,Samsung SDS,68
+c14,Netherlands,Europe,Build,Green,2026-06-20,Deloitte,50
+c15,Singapore,Asia Pacific,Go-Live,Amber,2026-04-15,PwC,82
+c16,Argentina,Latin America,Discovery,Green,2026-11-01,KPMG,8
+c17,Chile,Latin America,Planning,Green,2026-09-15,KPMG,20
+c18,Sweden,Europe,Build,Red,2026-06-01,Capgemini,35
+c19,Poland,Europe,Discovery,Green,2026-10-15,Deloitte,12
+c20,Thailand,Asia Pacific,Planning,Amber,2026-08-01,Fujitsu,18
+c21,South Africa,Africa,Discovery,Green,2026-11-15,PwC,5
+c22,UAE,Middle East,Planning,Green,2026-08-15,Deloitte,20
+c23,Colombia,Latin America,Discovery,Amber,2026-10-20,KPMG,7
+c24,New Zealand,Asia Pacific,UAT,Green,2026-05-15,PwC,65
+c25,Portugal,Europe,Build,Green,2026-07-10,Capgemini,42

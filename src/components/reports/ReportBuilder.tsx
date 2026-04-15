@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { countries } from '@/data/mock-data';
+import { useData } from '@/data/data-context';
 import { getCountryCode } from '@/lib/country-code';
 import { Download, Save } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -18,6 +18,7 @@ const availableFields = [
 ];
 
 export function ReportBuilder() {
+  const { countries } = useData();
   const [selectedFields, setSelectedFields] = useState<string[]>(['name', 'region', 'phase', 'ragStatus', 'progress']);
   const [filterRegion, setFilterRegion] = useState<string>('all');
   const [filterPhase, setFilterPhase] = useState<string>('all');

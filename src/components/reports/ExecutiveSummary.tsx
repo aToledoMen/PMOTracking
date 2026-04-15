@@ -1,12 +1,14 @@
-import { countries, kpiHistory, tasks } from '@/data/mock-data';
+import { kpiHistory } from '@/data/mock-data';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { getRAGSummary } from '@/data/mock-data';
+import { useData } from '@/data/data-context';
 import { getCountryCode } from '@/lib/country-code';
 import { Target, Globe, AlertTriangle, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function ExecutiveSummary() {
-  const rag = getRAGSummary();
+  const { countries, tasks } = useData();
+  const rag = getRAGSummary(countries);
   const total = rag.Green + rag.Amber + rag.Red;
   const latestKPI = kpiHistory[kpiHistory.length - 1];
 

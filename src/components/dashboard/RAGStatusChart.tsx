@@ -1,10 +1,12 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { getRAGSummary } from '@/data/mock-data';
+import { useData } from '@/data/data-context';
 
 const COLORS = { Green: '#15803d', Amber: '#b45309', Red: '#b91c1c' };
 
 export function RAGStatusChart() {
-  const rag = getRAGSummary();
+  const { countries } = useData();
+  const rag = getRAGSummary(countries);
   const data = [
     { name: 'On Track', value: rag.Green, color: COLORS.Green },
     { name: 'At Risk', value: rag.Amber, color: COLORS.Amber },

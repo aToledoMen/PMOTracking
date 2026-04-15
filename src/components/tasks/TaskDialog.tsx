@@ -5,7 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Task, TaskStatus, Priority } from '@/data/types';
-import { users, countries } from '@/data/mock-data';
+import { users } from '@/data/mock-data';
+import { useData } from '@/data/data-context';
 
 interface TaskDialogProps {
   open: boolean;
@@ -15,6 +16,7 @@ interface TaskDialogProps {
 }
 
 export function TaskDialog({ open, onClose, onSave, task }: TaskDialogProps) {
+  const { countries } = useData();
   const [title, setTitle] = useState(task?.title || '');
   const [description, setDescription] = useState(task?.description || '');
   const [assignedTo, setAssignedTo] = useState(task?.assignedTo || '');
