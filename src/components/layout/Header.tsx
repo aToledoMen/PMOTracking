@@ -12,10 +12,12 @@ interface HeaderProps {
 
 const viewTitles: Record<ViewType, string> = {
   dashboard: 'Executive Dashboard',
+  project: 'Project Plan',
   tasks: 'Task Management',
   'my-tasks': 'My Tasks',
   reports: 'Reports & Analytics',
   notifications: 'Notifications',
+  config: 'Configuration',
 };
 
 export function Header({ activeView, notificationCount, onNotificationsClick }: HeaderProps) {

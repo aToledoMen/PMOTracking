@@ -1,0 +1,124 @@
+ID,WBS,Name,Duration,Start,Finish,Pct_Complete,Predecessors,Resource_Names,Outline_Level,Summary,Notes,Baseline_Start,Baseline_Finish,Project
+1,1,Phase 1: Discovery,30d,2026-02-15,2026-03-16,100,,Sarah Chen,0,Y,Discovery phase,2026-02-15,2026-03-10,Germany
+2,1.1,Requirements Gathering,15d,2026-02-15,2026-03-01,100,,Marcus Johnson,1,Y,,2026-02-15,2026-02-28,Germany
+3,1.1.1,Stakeholder Interviews,5d,2026-02-15,2026-02-19,100,,Aisha Patel,2,N,,2026-02-15,2026-02-19,Germany
+4,1.1.2,Document Requirements,5d,2026-02-20,2026-02-26,100,3,Aisha Patel,2,N,,2026-02-20,2026-02-24,Germany
+5,1.1.3,Requirements Sign-off,5d,2026-02-27,2026-03-01,100,4,Marcus Johnson,2,N,,2026-02-25,2026-02-28,Germany
+6,1.2,Stakeholder Analysis,15d,2026-03-02,2026-03-16,100,5,Elena Rodriguez,1,Y,,2026-03-01,2026-03-10,Germany
+7,1.2.1,Impact Assessment,7d,2026-03-02,2026-03-08,100,,Elena Rodriguez,2,N,,2026-03-01,2026-03-05,Germany
+8,1.2.2,Communication Plan,8d,2026-03-09,2026-03-16,100,7,Elena Rodriguez,2,N,Slipped 6 days,2026-03-06,2026-03-10,Germany
+9,2,Phase 2: Planning,35d,2026-03-17,2026-04-30,65,,Sarah Chen,0,Y,,2026-03-11,2026-04-14,Germany
+10,2.1,Resource Allocation,20d,2026-03-17,2026-04-05,100,,James Park,1,Y,,2026-03-11,2026-03-28,Germany
+11,2.1.1,Team Assignment,7d,2026-03-17,2026-03-23,100,,James Park,2,N,,2026-03-11,2026-03-17,Germany
+12,2.1.2,Budget Approval,8d,2026-03-24,2026-03-31,100,11,James Park,2,N,,2026-03-18,2026-03-25,Germany
+13,2.1.3,Vendor Contracts,5d,2026-04-01,2026-04-05,100,12,Tom Wilson,2,N,,2026-03-26,2026-03-28,Germany
+14,2.2,Risk Assessment,15d,2026-04-06,2026-04-30,40,,Aisha Patel,1,Y,,2026-03-29,2026-04-14,Germany
+15,2.2.1,Risk Identification,7d,2026-04-06,2026-04-12,100,,Aisha Patel,2,N,,2026-03-29,2026-04-04,Germany
+16,2.2.2,Mitigation Planning,8d,2026-04-13,2026-04-30,30,15,Aisha Patel,2,N,In progress,2026-04-05,2026-04-14,Germany
+17,3,Phase 3: Build,45d,2026-05-01,2026-06-14,10,,Sarah Chen,0,Y,,2026-04-15,2026-05-29,Germany
+18,3.1,Core Development,25d,2026-05-01,2026-05-25,15,,Lisa Chang,1,Y,,2026-04-15,2026-05-09,Germany
+19,3.1.1,Backend API Development,10d,2026-05-01,2026-05-10,30,,David Kim,2,N,,2026-04-15,2026-04-24,Germany
+20,3.1.2,Frontend Development,10d,2026-05-11,2026-05-20,0,19,Lisa Chang,2,N,,2026-04-25,2026-05-04,Germany
+21,3.1.3,Database Setup,5d,2026-05-21,2026-05-25,0,19,David Kim,2,N,,2026-05-05,2026-05-09,Germany
+22,3.2,Integration Setup,20d,2026-05-26,2026-06-14,0,,Tom Wilson,1,Y,,2026-05-10,2026-05-29,Germany
+23,3.2.1,SSO Configuration,7d,2026-05-26,2026-06-01,0,,Tom Wilson,2,N,,2026-05-10,2026-05-16,Germany
+24,3.2.2,Data Pipeline Setup,7d,2026-06-02,2026-06-08,0,23,Alex Turner,2,N,,2026-05-17,2026-05-23,Germany
+25,3.2.3,SharePoint Integration,6d,2026-06-09,2026-06-14,0,24,Alex Turner,2,N,,2026-05-24,2026-05-29,Germany
+26,4,Phase 4: UAT,30d,2026-06-15,2026-07-14,0,,Sarah Chen,0,Y,,2026-05-30,2026-06-28,Germany
+27,4.1,Test Planning,10d,2026-06-15,2026-06-24,0,,Maria Santos,1,Y,,2026-05-30,2026-06-08,Germany
+28,4.1.1,Test Case Design,5d,2026-06-15,2026-06-19,0,,Maria Santos,2,N,,2026-05-30,2026-06-03,Germany
+29,4.1.2,Test Environment Setup,5d,2026-06-20,2026-06-24,0,28,David Kim,2,N,,2026-06-04,2026-06-08,Germany
+30,4.2,Test Execution,20d,2026-06-25,2026-07-14,0,27,Maria Santos,1,Y,,2026-06-09,2026-06-28,Germany
+31,4.2.1,Functional Testing,10d,2026-06-25,2026-07-04,0,,Maria Santos,2,N,,2026-06-09,2026-06-18,Germany
+32,4.2.2,Performance Testing,5d,2026-07-05,2026-07-09,0,31,David Kim,2,N,,2026-06-19,2026-06-23,Germany
+33,4.2.3,UAT Sign-off,5d,2026-07-10,2026-07-14,0,32,Sarah Chen,2,N,,2026-06-24,2026-06-28,Germany
+34,5,Phase 5: Go-Live,25d,2026-07-15,2026-08-08,0,,Sarah Chen,0,Y,,2026-06-29,2026-07-23,Germany
+35,5.1,Deployment Prep,10d,2026-07-15,2026-07-24,0,,Tom Wilson,1,Y,,2026-06-29,2026-07-08,Germany
+36,5.1.1,Runbook Creation,5d,2026-07-15,2026-07-19,0,,Tom Wilson,2,N,,2026-06-29,2026-07-03,Germany
+37,5.1.2,Rollback Plan,5d,2026-07-20,2026-07-24,0,36,Tom Wilson,2,N,,2026-07-04,2026-07-08,Germany
+38,5.2,Cutover,15d,2026-07-25,2026-08-08,0,35,Sarah Chen,1,Y,,2026-07-09,2026-07-23,Germany
+39,5.2.1,Data Migration,5d,2026-07-25,2026-07-29,0,,Alex Turner,2,N,,2026-07-09,2026-07-13,Germany
+40,5.2.2,Go-Live Execution,5d,2026-07-30,2026-08-03,0,39,Tom Wilson,2,N,,2026-07-14,2026-07-18,Germany
+41,5.2.3,Post Go-Live Support,5d,2026-08-04,2026-08-08,0,40,Lisa Chang,2,N,,2026-07-19,2026-07-23,Germany
+101,1,Phase 1: Discovery,30d,2026-03-01,2026-04-05,100,,Sarah Chen,0,Y,,2026-03-01,2026-03-30,Brazil
+102,1.1,Requirements Gathering,15d,2026-03-01,2026-03-15,100,,Marcus Johnson,1,Y,,2026-03-01,2026-03-14,Brazil
+103,1.1.1,Stakeholder Interviews,5d,2026-03-01,2026-03-05,100,,Aisha Patel,2,N,,2026-03-01,2026-03-05,Brazil
+104,1.1.2,Document Requirements,5d,2026-03-06,2026-03-12,100,103,Aisha Patel,2,N,,2026-03-06,2026-03-10,Brazil
+105,1.1.3,Requirements Sign-off,5d,2026-03-13,2026-03-15,100,104,Marcus Johnson,2,N,,2026-03-11,2026-03-14,Brazil
+106,1.2,Stakeholder Analysis,15d,2026-03-16,2026-04-05,100,105,Elena Rodriguez,1,Y,,2026-03-15,2026-03-30,Brazil
+107,1.2.1,Impact Assessment,7d,2026-03-16,2026-03-22,100,,Elena Rodriguez,2,N,,2026-03-15,2026-03-21,Brazil
+108,1.2.2,Communication Plan,8d,2026-03-23,2026-04-05,100,107,Elena Rodriguez,2,N,,2026-03-22,2026-03-30,Brazil
+109,2,Phase 2: Planning,35d,2026-04-06,2026-05-10,45,,Sarah Chen,0,Y,,2026-03-31,2026-05-03,Brazil
+110,2.1,Resource Allocation,20d,2026-04-06,2026-04-25,80,,James Park,1,Y,,2026-03-31,2026-04-19,Brazil
+111,2.1.1,Team Assignment,7d,2026-04-06,2026-04-12,100,,James Park,2,N,,2026-03-31,2026-04-06,Brazil
+112,2.1.2,Budget Approval,8d,2026-04-13,2026-04-20,100,111,James Park,2,N,,2026-04-07,2026-04-14,Brazil
+113,2.1.3,Vendor Contracts,5d,2026-04-21,2026-04-25,40,112,Tom Wilson,2,N,In progress,2026-04-15,2026-04-19,Brazil
+114,2.2,Risk Assessment,15d,2026-04-26,2026-05-10,0,,Aisha Patel,1,Y,,2026-04-20,2026-05-03,Brazil
+115,2.2.1,Risk Identification,7d,2026-04-26,2026-05-02,0,,Aisha Patel,2,N,,2026-04-20,2026-04-26,Brazil
+116,2.2.2,Mitigation Planning,8d,2026-05-03,2026-05-10,0,115,Aisha Patel,2,N,,2026-04-27,2026-05-03,Brazil
+117,3,Phase 3: Build,45d,2026-05-11,2026-06-24,0,,Sarah Chen,0,Y,,2026-05-04,2026-06-17,Brazil
+118,3.1,Core Development,25d,2026-05-11,2026-06-04,0,,Lisa Chang,1,Y,,2026-05-04,2026-05-28,Brazil
+119,3.1.1,Backend API Development,10d,2026-05-11,2026-05-20,0,,David Kim,2,N,,2026-05-04,2026-05-13,Brazil
+120,3.1.2,Frontend Development,10d,2026-05-21,2026-05-30,0,119,Lisa Chang,2,N,,2026-05-14,2026-05-23,Brazil
+121,3.1.3,Database Setup,5d,2026-05-31,2026-06-04,0,119,David Kim,2,N,,2026-05-24,2026-05-28,Brazil
+122,3.2,Integration Setup,20d,2026-06-05,2026-06-24,0,,Tom Wilson,1,Y,,2026-05-29,2026-06-17,Brazil
+123,3.2.1,SSO Configuration,7d,2026-06-05,2026-06-11,0,,Tom Wilson,2,N,,2026-05-29,2026-06-04,Brazil
+124,3.2.2,Data Pipeline Setup,7d,2026-06-12,2026-06-18,0,123,Alex Turner,2,N,,2026-06-05,2026-06-11,Brazil
+125,3.2.3,SharePoint Integration,6d,2026-06-19,2026-06-24,0,124,Alex Turner,2,N,,2026-06-12,2026-06-17,Brazil
+126,4,Phase 4: UAT,30d,2026-06-25,2026-07-24,0,,Sarah Chen,0,Y,,2026-06-18,2026-07-17,Brazil
+127,4.1,Test Planning,10d,2026-06-25,2026-07-04,0,,Maria Santos,1,Y,,2026-06-18,2026-06-27,Brazil
+128,4.1.1,Test Case Design,5d,2026-06-25,2026-06-29,0,,Maria Santos,2,N,,2026-06-18,2026-06-22,Brazil
+129,4.1.2,Test Environment Setup,5d,2026-06-30,2026-07-04,0,128,David Kim,2,N,,2026-06-23,2026-06-27,Brazil
+130,4.2,Test Execution,20d,2026-07-05,2026-07-24,0,127,Maria Santos,1,Y,,2026-06-28,2026-07-17,Brazil
+131,4.2.1,Functional Testing,10d,2026-07-05,2026-07-14,0,,Maria Santos,2,N,,2026-06-28,2026-07-07,Brazil
+132,4.2.2,Performance Testing,5d,2026-07-15,2026-07-19,0,131,David Kim,2,N,,2026-07-08,2026-07-12,Brazil
+133,4.2.3,UAT Sign-off,5d,2026-07-20,2026-07-24,0,132,Sarah Chen,2,N,,2026-07-13,2026-07-17,Brazil
+134,5,Phase 5: Go-Live,25d,2026-07-25,2026-08-18,0,,Sarah Chen,0,Y,,2026-07-18,2026-08-11,Brazil
+135,5.1,Deployment Prep,10d,2026-07-25,2026-08-03,0,,Tom Wilson,1,Y,,2026-07-18,2026-07-27,Brazil
+136,5.1.1,Runbook Creation,5d,2026-07-25,2026-07-29,0,,Tom Wilson,2,N,,2026-07-18,2026-07-22,Brazil
+137,5.1.2,Rollback Plan,5d,2026-07-30,2026-08-03,0,136,Tom Wilson,2,N,,2026-07-23,2026-07-27,Brazil
+138,5.2,Cutover,15d,2026-08-04,2026-08-18,0,135,Sarah Chen,1,Y,,2026-07-28,2026-08-11,Brazil
+139,5.2.1,Data Migration,5d,2026-08-04,2026-08-08,0,,Alex Turner,2,N,,2026-07-28,2026-08-01,Brazil
+140,5.2.2,Go-Live Execution,5d,2026-08-09,2026-08-13,0,139,Tom Wilson,2,N,,2026-08-02,2026-08-06,Brazil
+141,5.2.3,Post Go-Live Support,5d,2026-08-14,2026-08-18,0,140,Lisa Chang,2,N,,2026-08-07,2026-08-11,Brazil
+201,1,Phase 1: Discovery,30d,2026-04-01,2026-04-30,50,,Sarah Chen,0,Y,,2026-04-01,2026-04-30,United States
+202,1.1,Requirements Gathering,15d,2026-04-01,2026-04-15,80,,Marcus Johnson,1,Y,,2026-04-01,2026-04-15,United States
+203,1.1.1,Stakeholder Interviews,5d,2026-04-01,2026-04-05,100,,Aisha Patel,2,N,,2026-04-01,2026-04-05,United States
+204,1.1.2,Document Requirements,5d,2026-04-06,2026-04-10,100,203,Aisha Patel,2,N,,2026-04-06,2026-04-10,United States
+205,1.1.3,Requirements Sign-off,5d,2026-04-11,2026-04-15,40,204,Marcus Johnson,2,N,In progress,2026-04-11,2026-04-15,United States
+206,1.2,Stakeholder Analysis,15d,2026-04-16,2026-04-30,0,205,Elena Rodriguez,1,Y,,2026-04-16,2026-04-30,United States
+207,1.2.1,Impact Assessment,7d,2026-04-16,2026-04-22,0,,Elena Rodriguez,2,N,,2026-04-16,2026-04-22,United States
+208,1.2.2,Communication Plan,8d,2026-04-23,2026-04-30,0,207,Elena Rodriguez,2,N,,2026-04-23,2026-04-30,United States
+209,2,Phase 2: Planning,35d,2026-05-01,2026-06-04,0,,Sarah Chen,0,Y,,2026-05-01,2026-06-04,United States
+210,2.1,Resource Allocation,20d,2026-05-01,2026-05-20,0,,James Park,1,Y,,2026-05-01,2026-05-20,United States
+211,2.1.1,Team Assignment,7d,2026-05-01,2026-05-07,0,,James Park,2,N,,2026-05-01,2026-05-07,United States
+212,2.1.2,Budget Approval,8d,2026-05-08,2026-05-15,0,211,James Park,2,N,,2026-05-08,2026-05-15,United States
+213,2.1.3,Vendor Contracts,5d,2026-05-16,2026-05-20,0,212,Tom Wilson,2,N,,2026-05-16,2026-05-20,United States
+214,2.2,Risk Assessment,15d,2026-05-21,2026-06-04,0,,Aisha Patel,1,Y,,2026-05-21,2026-06-04,United States
+215,2.2.1,Risk Identification,7d,2026-05-21,2026-05-27,0,,Aisha Patel,2,N,,2026-05-21,2026-05-27,United States
+216,2.2.2,Mitigation Planning,8d,2026-05-28,2026-06-04,0,215,Aisha Patel,2,N,,2026-05-28,2026-06-04,United States
+217,3,Phase 3: Build,45d,2026-06-05,2026-07-19,0,,Sarah Chen,0,Y,,2026-06-05,2026-07-19,United States
+218,3.1,Core Development,25d,2026-06-05,2026-06-29,0,,Lisa Chang,1,Y,,2026-06-05,2026-06-29,United States
+219,3.1.1,Backend API Development,10d,2026-06-05,2026-06-14,0,,David Kim,2,N,,2026-06-05,2026-06-14,United States
+220,3.1.2,Frontend Development,10d,2026-06-15,2026-06-24,0,219,Lisa Chang,2,N,,2026-06-15,2026-06-24,United States
+221,3.1.3,Database Setup,5d,2026-06-25,2026-06-29,0,219,David Kim,2,N,,2026-06-25,2026-06-29,United States
+222,3.2,Integration Setup,20d,2026-06-30,2026-07-19,0,,Tom Wilson,1,Y,,2026-06-30,2026-07-19,United States
+223,3.2.1,SSO Configuration,7d,2026-06-30,2026-07-06,0,,Tom Wilson,2,N,,2026-06-30,2026-07-06,United States
+224,3.2.2,Data Pipeline Setup,7d,2026-07-07,2026-07-13,0,223,Alex Turner,2,N,,2026-07-07,2026-07-13,United States
+225,3.2.3,SharePoint Integration,6d,2026-07-14,2026-07-19,0,224,Alex Turner,2,N,,2026-07-14,2026-07-19,United States
+226,4,Phase 4: UAT,30d,2026-07-20,2026-08-18,0,,Sarah Chen,0,Y,,2026-07-20,2026-08-18,United States
+227,4.1,Test Planning,10d,2026-07-20,2026-07-29,0,,Maria Santos,1,Y,,2026-07-20,2026-07-29,United States
+228,4.1.1,Test Case Design,5d,2026-07-20,2026-07-24,0,,Maria Santos,2,N,,2026-07-20,2026-07-24,United States
+229,4.1.2,Test Environment Setup,5d,2026-07-25,2026-07-29,0,228,David Kim,2,N,,2026-07-25,2026-07-29,United States
+230,4.2,Test Execution,20d,2026-07-30,2026-08-18,0,227,Maria Santos,1,Y,,2026-07-30,2026-08-18,United States
+231,4.2.1,Functional Testing,10d,2026-07-30,2026-08-08,0,,Maria Santos,2,N,,2026-07-30,2026-08-08,United States
+232,4.2.2,Performance Testing,5d,2026-08-09,2026-08-13,0,231,David Kim,2,N,,2026-08-09,2026-08-13,United States
+233,4.2.3,UAT Sign-off,5d,2026-08-14,2026-08-18,0,232,Sarah Chen,2,N,,2026-08-14,2026-08-18,United States
+234,5,Phase 5: Go-Live,25d,2026-08-19,2026-09-12,0,,Sarah Chen,0,Y,,2026-08-19,2026-09-12,United States
+235,5.1,Deployment Prep,10d,2026-08-19,2026-08-28,0,,Tom Wilson,1,Y,,2026-08-19,2026-08-28,United States
+236,5.1.1,Runbook Creation,5d,2026-08-19,2026-08-23,0,,Tom Wilson,2,N,,2026-08-19,2026-08-23,United States
+237,5.1.2,Rollback Plan,5d,2026-08-24,2026-08-28,0,236,Tom Wilson,2,N,,2026-08-24,2026-08-28,United States
+238,5.2,Cutover,15d,2026-08-29,2026-09-12,0,235,Sarah Chen,1,Y,,2026-08-29,2026-09-12,United States
+239,5.2.1,Data Migration,5d,2026-08-29,2026-09-02,0,,Alex Turner,2,N,,2026-08-29,2026-09-02,United States
+240,5.2.2,Go-Live Execution,5d,2026-09-03,2026-09-07,0,239,Tom Wilson,2,N,,2026-09-03,2026-09-07,United States
+241,5.2.3,Post Go-Live Support,5d,2026-09-08,2026-09-12,0,240,Lisa Chang,2,N,,2026-09-08,2026-09-12,United States

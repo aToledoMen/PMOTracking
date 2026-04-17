@@ -6,6 +6,8 @@ import { TaskBoard } from '@/components/tasks/TaskBoard';
 import { MyTasksView } from '@/components/tasks/MyTasksView';
 import { ReportsView } from '@/components/reports/ReportsView';
 import { NotificationPanel } from '@/components/notifications/NotificationPanel';
+import { ProjectView } from '@/components/project/ProjectView';
+import { ConfigView } from '@/components/config/ConfigView';
 import { notifications as initialNotifications } from '@/data/mock-data';
 import { DataProvider } from '@/data/data-context';
 import { Notification } from '@/data/types';
@@ -30,12 +32,16 @@ function AppInner() {
     switch (activeView) {
       case 'dashboard':
         return <DashboardView />;
+      case 'project':
+        return <ProjectView />;
       case 'tasks':
         return <TaskBoard />;
       case 'my-tasks':
         return <MyTasksView />;
       case 'reports':
         return <ReportsView />;
+      case 'config':
+        return <ConfigView />;
       case 'notifications':
         return (
           <NotificationPanel

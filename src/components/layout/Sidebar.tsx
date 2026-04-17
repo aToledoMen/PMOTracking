@@ -1,7 +1,7 @@
-import { LayoutDashboard, CheckSquare, User, FileBarChart, Bell } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, User, FileBarChart, Bell, GanttChart, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export type ViewType = 'dashboard' | 'tasks' | 'my-tasks' | 'reports' | 'notifications';
+export type ViewType = 'dashboard' | 'project' | 'tasks' | 'my-tasks' | 'reports' | 'notifications' | 'config';
 
 interface SidebarProps {
   activeView: ViewType;
@@ -11,10 +11,12 @@ interface SidebarProps {
 
 const navItems: { id: ViewType; label: string; icon: React.ElementType }[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'project', label: 'Project Plan', icon: GanttChart },
   { id: 'tasks', label: 'Task Management', icon: CheckSquare },
   { id: 'my-tasks', label: 'My Tasks', icon: User },
   { id: 'reports', label: 'Reports', icon: FileBarChart },
   { id: 'notifications', label: 'Notifications', icon: Bell },
+  { id: 'config', label: 'Configuration', icon: Settings },
 ];
 
 export function Sidebar({ activeView, onViewChange, notificationCount }: SidebarProps) {
